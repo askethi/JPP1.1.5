@@ -19,8 +19,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 "ID BIGINT NOT NULL AUTO_INCREMENT, NAME VARCHAR(100), " +
                 "LASTNAME VARCHAR(100), AGE INT, PRIMARY KEY (ID) )";
 
-        try (Connection connection = Util.getConnection()) {
-            Statement stat = connection.createStatement();
+        try (Connection connection = Util.getConnection();
+             Statement stat = connection.createStatement()) {
             stat.executeUpdate(command);
             System.out.println("Table created");
 
@@ -32,8 +32,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         String command = "DROP TABLE IF EXISTS users";
 
-        try (Connection connection = Util.getConnection()) {
-            Statement stat = connection.createStatement();
+        try (Connection connection = Util.getConnection();
+             Statement stat = connection.createStatement()) {
             stat.execute(command);
             System.out.println("Table dropped");
 
@@ -45,8 +45,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         String command = "INSERT INTO users (NAME, LASTNAME, AGE) VALUES (?, ?, ?)";
 
-        try (Connection connection = Util.getConnection()) {
-            PreparedStatement pstat = connection.prepareStatement(command);
+        try (Connection connection = Util.getConnection();
+             PreparedStatement pstat = connection.prepareStatement(command)) {
             pstat.setString(1, name);
             pstat.setString(2, lastName);
             pstat.setByte(3, age);
@@ -62,8 +62,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         String command = "DELETE users WHERE ID=?";
 
-        try (Connection connection = Util.getConnection()) {
-            PreparedStatement pstat = connection.prepareStatement(command);
+        try (Connection connection = Util.getConnection();
+             PreparedStatement pstat = connection.prepareStatement(command)) {
             pstat.setLong(1, id);
             pstat.executeUpdate();
             System.out.println("User deleted");
@@ -78,8 +78,8 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> users = new ArrayList<>();
         String command = "SELECT ID, NAME, LASTNAME, AGE FROM users";
 
-        try (Connection connection = Util.getConnection()) {
-            Statement stat = connection.createStatement();
+        try (Connection connection = Util.getConnection();
+             Statement stat = connection.createStatement()) {
             ResultSet rset = stat.executeQuery(command);
             while (rset.next()) {
                 User user = new User();
@@ -100,8 +100,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         String command = "DELETE FROM users";
 
-        try (Connection connection = Util.getConnection()) {
-            Statement stat = connection.createStatement();
+        try (Connection connection = Util.getConnection();
+             Statement stat = connection.createStatement()) {
             stat.executeUpdate(command);
             System.out.println("Table cleaned");
 
