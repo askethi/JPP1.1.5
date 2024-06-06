@@ -18,27 +18,6 @@ public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
 
     }
-    /*
-    @Override
-    public void createUsersTable() {
-        Transaction transaction = null;
-
-        try (Session session = Util.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            String sql = "CREATE TABLE IF NOT EXISTS users(" +
-                    "ID BIGINT NOT NULL AUTO_INCREMENT, NAME VARCHAR(100), " +
-                    "LASTNAME VARCHAR(100), AGE INT, PRIMARY KEY (ID) )";
-            session.createSQLQuery(sql).executeUpdate();
-            transaction.commit();
-            System.out.println("User added");
-        } catch (Exception e) {
-            if (transaction != null) {
-                //   transaction.rollback();
-            }
-        }
-    }
-
-     */
 
     @Override
     public void createUsersTable() {
@@ -49,7 +28,6 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Connection connection = Util.getConnection()) {
             Statement stat = connection.createStatement();
             stat.executeUpdate(command);
-            System.out.println("Table created");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,7 +42,6 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Connection connection = Util.getConnection()) {
             Statement stat = connection.createStatement();
             stat.execute(command);
-            System.out.println("Table dropped");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,14 +55,12 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getSessionFactory()) {
             transaction = session.beginTransaction();
             session.persist(new User(name, lastName, age));
-            //transaction.commit();
-            session.close();
-            System.out.println("User added");
+            transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -98,13 +73,12 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction = session.beginTransaction();
             User user = session.get(User.class, id);
             session.delete(user);
-            session.flush();
             transaction.commit();
-            System.out.println("User deleted");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
+            e.printStackTrace();
         }
     }
 
@@ -120,14 +94,12 @@ public class UserDaoHibernateImpl implements UserDao {
             CriteriaQuery<User> criteria = cb.createQuery(User.class);
             criteria.from(User.class);
             users = session.createQuery(criteria).getResultList();
-            //users = session.createCriteria(User.class).list();
             transaction.commit();
-            System.out.println("Users collected");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println(e.getMessage() + "Something wrong here (getAll)");
+            e.printStackTrace();
         }
         return users;
     }
@@ -139,15 +111,13 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getSessionFactory()) {
             transaction = session.beginTransaction();
             String command = String.format("DELETE FROM %s", "users");
-           // Query query = session.createQuery(command);
             session.createSQLQuery(command).executeUpdate();
             transaction.commit();
-            System.out.println("Table cleaned");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
