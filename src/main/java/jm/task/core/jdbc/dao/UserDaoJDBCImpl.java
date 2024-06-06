@@ -47,11 +47,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Connection connection = Util.getConnection();
              PreparedStatement pstat = connection.prepareStatement(command)) {
-            pstat.setString(1, name);
-            pstat.setString(2, lastName);
-            pstat.setByte(3, age);
-            pstat.executeUpdate();
-            System.out.println("User added");
+             pstat.setString(1, name);
+             pstat.setString(2, lastName);
+             pstat.setByte(3, age);
+             pstat.executeUpdate();
+             System.out.println("User added");
 
         } catch (SQLException e) {
             e.printStackTrace();
